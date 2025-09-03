@@ -1,5 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
+import ImcResult from "./ImcResult";
+import ImcError from "./ImcError";
 
 interface ImcResult {
   imc: number;
@@ -40,46 +42,62 @@ function ImcForm() {
   };
 
   return (
-    <div>
-      <div>
-        <h1>Calculadora de IMC</h1>
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label>Altura (m):</label>
-            <input
-              type="number"
-              value={altura}
-              onChange={(e) => setAltura(e.target.value)}
-              step="0.01"
-              min="0.1"
-            />
-          </div>
-          <div>
-            <label>Peso (kg):</label>
-            <input
-              type="number"
-              value={peso}
-              onChange={(e) => setPeso(e.target.value)}
-              min="1"
-            />
-          </div>
-          <button type="submit">Calcular</button>
-        </form>
-
-        {resultado && (
-          <div>
-            <p>IMC: {resultado.imc.toFixed(2)}</p>
-            <p>Categoría: {resultado.categoria}</p>
-          </div>
-        )}
-
-        {error && (
-          <div>
-            <p>{error}</p>
-          </div>
-        )}
+    <div className="main-bg-color min-vh-100 d-flex flex-column align-items-center justify-content-center">
+      <div className="text-center text-white mb-4">
+        <h1 className="fw-bold fs-2">
+          Calcula tu Índice de Masa Corporal (IMC)
+        </h1>
+        <p className="opacity-75">
+          Tu IMC puede ser una medida inicial útil para identificar tu
+          clasificación de peso.
+        </p>
       </div>
-      
+      <div className="card-container shadow-lg d-flex">
+        <div className="left-panel">
+          <form onSubmit={handleSubmit}>
+            <div className="form-group mb-4">
+              <label className="form-label text-dark-blue">TU ALTURA</label>
+              <div className="d-flex align-items-center">
+                <input
+                  type="number"
+                  className="form-control"
+                  value={altura}
+                  onChange={(e) => setAltura(e.target.value)}
+                  step="0.01"
+                  min="0.1"
+                />
+                <span className="unit-label ms-2">m</span>
+              </div>
+            </div>
+            <div className="form-group mb-4">
+              <label className="form-label text-dark-blue">TU PESO</label>
+              <div className="d-flex align-items-center">
+                <input
+                  type="number"
+                  className="form-control"
+                  value={peso}
+                  onChange={(e) => setPeso(e.target.value)}
+                  min="1"
+                />
+                <span className="unit-label ms-2">kg</span>
+              </div>
+            </div>
+            {error && <ImcError error={error} />}
+            <button className="btn btn-primary w-100" type="submit">
+              Calcular
+            </button>
+          </form>
+        </div>
+        <div className="right-panel p-4 text-center">
+          {resultado ? (
+            <ImcResult imc={resultado.imc} categoria={resultado.categoria} />
+          ) : (
+            <div className="text-center text-muted">
+              <p>Introduce tus datos para ver el resultado aquí.</p>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

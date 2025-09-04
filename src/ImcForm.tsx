@@ -31,7 +31,7 @@ function ImcForm() {
         altura: alturaNum,
         peso: pesoNum,
       });
-      setResultado(response.data);
+      setResultado(response.data as ImcResult);
       setError("");
     } catch (err) {
       setError(

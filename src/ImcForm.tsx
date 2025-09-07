@@ -27,10 +27,13 @@ function ImcForm() {
     }
 
     try {
-      const response = await axios.post("https://proyecto-1-backend.onrender.com/imc/calcular", {
-        altura: alturaNum,
-        peso: pesoNum,
-      });
+      const response = await axios.post(
+        "https://proyecto-1-backend.onrender.com/imc/calcular",
+        {
+          altura: alturaNum,
+          peso: pesoNum,
+        }
+      );
       setResultado(response.data as ImcResult);
       setError("");
     } catch (err) {
@@ -65,6 +68,7 @@ function ImcForm() {
                   onChange={(e) => setAltura(e.target.value)}
                   step="0.01"
                   min="0.1"
+                  max="3"
                 />
                 <span className="unit-label ms-2">m</span>
               </div>
@@ -78,6 +82,7 @@ function ImcForm() {
                   value={peso}
                   onChange={(e) => setPeso(e.target.value)}
                   min="1"
+                  max="500"
                 />
                 <span className="unit-label ms-2">kg</span>
               </div>

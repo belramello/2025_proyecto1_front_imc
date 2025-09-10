@@ -1,12 +1,9 @@
-import axios from "axios";
 import React, { useState } from "react";
-import ImcResult from "./ImcResult";
 import ImcError from "./ImcError";
-
-interface ImcResult {
-  imc: number;
-  categoria: string;
-}
+import { calculateIMC } from "./services/imcService";
+import { ImcResult } from "./interfaces/ImcResult";
+import ImcResultBox from "./ImcResultBox";
+import { InputField } from "./InputField";
 
 function ImcForm() {
   const [altura, setAltura] = useState("");
@@ -27,19 +24,11 @@ function ImcForm() {
     }
 
     try {
-      const response = await axios.post(
-        "https://proyecto-1-backend.onrender.com/imc/calcular",
-        {
-          altura: alturaNum,
-          peso: pesoNum,
-        }
-      );
-      setResultado(response.data as ImcResult);
+      const data = await calculateIMC(alturaNum, pesoNum);
+      setResultado(data);
       setError("");
-    } catch (err) {
-      setError(
-        "Error al calcular el IMC. Verifica si el backend está corriendo."
-      );
+    } catch (err: any) {
+      setError(err.message || "Error inesperado al calcular el IMC.");
       setResultado(null);
     }
   };
@@ -58,35 +47,23 @@ function ImcForm() {
       <div className="card-container shadow-lg d-flex">
         <div className="left-panel">
           <form onSubmit={handleSubmit}>
-            <div className="form-group mb-4">
-              <label className="form-label text-dark-blue">TU ALTURA</label>
-              <div className="d-flex align-items-center">
-                <input
-                  type="number"
-                  className="form-control"
-                  value={altura}
-                  onChange={(e) => setAltura(e.target.value)}
-                  step="0.01"
-                  min="0.1"
-                  max="3"
-                />
-                <span className="unit-label ms-2">m</span>
-              </div>
-            </div>
-            <div className="form-group mb-4">
-              <label className="form-label text-dark-blue">TU PESO</label>
-              <div className="d-flex align-items-center">
-                <input
-                  type="number"
-                  className="form-control"
-                  value={peso}
-                  onChange={(e) => setPeso(e.target.value)}
-                  min="1"
-                  max="500"
-                />
-                <span className="unit-label ms-2">kg</span>
-              </div>
-            </div>
+            <InputField
+              label="Tu altura"
+              value={altura}
+              onChange={setAltura}
+              unit="m"
+              step="0.01"
+              min="0.1"
+              max="3"
+            />
+            <InputField
+              label="Tu peso"
+              value={peso}
+              onChange={setPeso}
+              unit="kg"
+              min="1"
+              max="500"
+            />
             {error && <ImcError error={error} />}
             <button className="btn btn-primary w-100" type="submit">
               Calcular
@@ -95,7 +72,7 @@ function ImcForm() {
         </div>
         <div className="right-panel p-4 text-center">
           {resultado ? (
-            <ImcResult imc={resultado.imc} categoria={resultado.categoria} />
+            <ImcResultBox imc={resultado.imc} categoria={resultado.categoria} />
           ) : (
             <div className="text-center text-muted">
               <p>Introduce tus datos para ver el resultado aquí.</p>

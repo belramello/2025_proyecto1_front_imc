@@ -20,13 +20,19 @@ function App() {
       localStorage.removeItem("token");
       setIsAuth(false);
     }
-
     setIsLoading(false);
   }, []);
 
   if (isLoading) {
     return (
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
         <p>Cargando...</p>
       </div>
     );
@@ -35,11 +41,21 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navigate to={isAuth ? "/imc/calcular" : "/inicio-sesion"} replace />} />
+        <Route
+          path="/"
+          element={
+            <Navigate
+              to={isAuth ? "/imc/calcular" : "/inicio-sesion"}
+              replace
+            />
+          }
+        />
 
         <Route
           path="/imc/calcular"
-          element={isAuth ? <ImcForm /> : <Navigate to="/inicio-sesion" replace />}
+          element={
+            isAuth ? <ImcForm /> : <Navigate to="/inicio-sesion" replace />
+          }
         />
 
         <Route
@@ -64,7 +80,7 @@ function App() {
               <Navigate to="/imc/calcular" replace />
             ) : (
               <Registro
-                onCancelar={() => window.location.href = "/inicio-sesion"}
+                onCancelar={() => (window.location.href = "/inicio-sesion")}
                 onRegistrar={() => {
                   setIsAuth(true);
                 }}

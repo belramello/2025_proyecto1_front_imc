@@ -4,11 +4,12 @@ interface InputFieldProps {
   label: string;
   value: string;
   onChange: (value: string) => void;
-  unit: string;
+  unit?: string;
   type?: string;
   step?: string;
   min?: string;
   max?: string;
+  placeholder?: string;
 }
 
 export const InputField: React.FC<InputFieldProps> = ({
@@ -20,6 +21,7 @@ export const InputField: React.FC<InputFieldProps> = ({
   step,
   min,
   max,
+  placeholder,
 }) => {
   return (
     <div className="form-group mb-4">
@@ -33,8 +35,9 @@ export const InputField: React.FC<InputFieldProps> = ({
           step={step}
           min={min}
           max={max}
+          placeholder={placeholder}
         />
-        <span className="unit-label ms-2">{unit}</span>
+        {unit && <span className="unit-label ms-2">{unit}</span>}
       </div>
     </div>
   );

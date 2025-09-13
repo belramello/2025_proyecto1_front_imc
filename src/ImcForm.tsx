@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { calcularImc, ImcResult } from "./services/imc";
-import ImcResultComponent from "./ImcResult";
-import ImcError from "./ImcError";
+import ImcError from "./components/ImcError";
 import Navbar from "./components/NavBar";
+import ImcResultBox from "./components/ImcResultBox";
+import { ImcResult } from "./interfaces/ImcResult";
+import { calcularImc } from "./services/imcService";
+import { InputField } from "./components/InputField";
 
 function ImcForm() {
   const [altura, setAltura] = useState("");
@@ -34,10 +36,9 @@ function ImcForm() {
   return (
     <>
       <Navbar />
-
       <div
         className="main-bg-color d-flex flex-column align-items-center justify-content-center"
-        style={{ height: "calc(100vh - 56px)" }} // ✅ ocupa todo el alto menos el navbar
+        style={{ height: "calc(100vh - 56px)" }}
       >
         <div className="text-center text-white mb-4">
           <h1 className="fw-bold fs-2">
@@ -52,37 +53,23 @@ function ImcForm() {
         <div className="card-container shadow-lg d-flex">
           <div className="left-panel">
             <form onSubmit={handleSubmit}>
-              <div className="form-group mb-4">
-                <label className="form-label text-dark-blue">TU ALTURA</label>
-                <div className="d-flex align-items-center">
-                  <input
-                    type="number"
-                    className="form-control"
-                    value={altura}
-                    onChange={(e) => setAltura(e.target.value)}
-                    step="0.01"
-                    min="0.1"
-                    max="3"
-                  />
-                  <span className="unit-label ms-2">m</span>
-                </div>
-              </div>
-
-              <div className="form-group mb-4">
-                <label className="form-label text-dark-blue">TU PESO</label>
-                <div className="d-flex align-items-center">
-                  <input
-                    type="number"
-                    className="form-control"
-                    value={peso}
-                    onChange={(e) => setPeso(e.target.value)}
-                    min="1"
-                    max="500"
-                  />
-                  <span className="unit-label ms-2">kg</span>
-                </div>
-              </div>
-
+              <InputField
+                label="Tu altura"
+                value={altura}
+                onChange={setAltura}
+                unit="m"
+                step="0.01"
+                min="0.1"
+                max="3"
+              />
+              <InputField
+                label="Tu peso"
+                value={peso}
+                onChange={setPeso}
+                unit="kg"
+                min="1"
+                max="500"
+              />
               {error && <ImcError error={error} />}
 
               <button className="btn btn-primary w-100" type="submit">
@@ -93,7 +80,7 @@ function ImcForm() {
 
           <div className="right-panel p-4 text-center">
             {resultado ? (
-              <ImcResultComponent
+              <ImcResultBox
                 imc={resultado.imc}
                 categoria={resultado.categoria}
               />

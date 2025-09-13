@@ -20,6 +20,17 @@
   padding: 0;
 }
 
+.card-container-register {
+  display: flex;
+  background-color: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  max-width: 500px;
+  width: 90%;
+  padding: 0;
+}
+
 .left-panel {
   flex: 1;
   padding: 3rem;

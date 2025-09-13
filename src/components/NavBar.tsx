@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { cerrarSesion } from "../services/auth";
+import { cerrarSesion } from "../services/authService";
 
 function Navbar() {
   const nombre = localStorage.getItem("nombreUsuario");
@@ -15,7 +15,7 @@ function Navbar() {
     >
       <div className="container-fluid">
         <Link className="navbar-brand fw-bold" to="/imc/calcular">
-          IMC 
+          IMC
         </Link>
 
         <button
@@ -33,10 +33,14 @@ function Navbar() {
         <div className="collapse navbar-collapse" id="navbarContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <Link className="nav-link" to="/imc/calcular">Inicio</Link>
+              <Link className="nav-link" to="/imc/calcular">
+                Inicio
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/historial">Historial</Link>
+              <Link className="nav-link" to="/historial">
+                Historial
+              </Link>
             </li>
           </ul>
 
@@ -44,7 +48,10 @@ function Navbar() {
             <span className="text-white me-3">
               Hola, <strong>{nombre || "Usuario"}</strong>
             </span>
-            <button className="btn btn-outline-light btn-sm" onClick={handleLogout}>
+            <button
+              className="btn btn-outline-light btn-sm"
+              onClick={handleLogout}
+            >
               Cerrar sesión
             </button>
           </div>

@@ -1,5 +1,7 @@
-
-export const guardarToken = (accessToken: string, refreshToken: string | null) => {
+export const guardarToken = (
+  accessToken: string,
+  refreshToken: string | null
+) => {
   try {
     localStorage.setItem("accessToken", accessToken);
     if (refreshToken !== null) {

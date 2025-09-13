@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import saludable from "../assets/saludable.png";
-import { login } from "../services/auth";
-import { guardarToken } from "../utils/storage";
+import { login } from "../services/authService";
+import ImcError from "../components/ImcError";
+import { InputField } from "../components/InputField";
 
 type Props = {
   onLoginSuccess: () => void;
@@ -21,16 +22,14 @@ function InicioSesion({ onLoginSuccess }: Props) {
       setError("Por favor completá todos los campos.");
       return;
     }
-
     setLoading(true);
     setError("");
 
     try {
-      const { accessToken, refreshToken } = await login(email, contraseña);
-      guardarToken(accessToken, refreshToken);
-      onLoginSuccess(); // 🔥 Esto actualiza el estado y navega desde AppRoutes
+      await login(email, contraseña);
+      onLoginSuccess();
     } catch (err: any) {
-      setError(err.message || "Error al iniciar sesión");
+      setError("El usuario no existe o la contraseña es incorrecta");
     } finally {
       setLoading(false);
     }
@@ -46,33 +45,34 @@ function InicioSesion({ onLoginSuccess }: Props) {
       </div>
 
       <div className="card-container shadow-lg d-flex">
-        <div className="left-panel p-4 d-flex flex-column justify-content-center" style={{ minWidth: "300px" }}>
+        <div
+          className="left-panel p-4 d-flex flex-column justify-content-center"
+          style={{ minWidth: "300px" }}
+        >
           <form onSubmit={handleSubmit}>
-            <div className="form-group mb-4">
-              <label className="form-label text-dark-blue">Correo Electrónico</label>
-              <input
-                type="email"
-                className="form-control"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="ejemplo@email.com"
-              />
-            </div>
+            <InputField
+              label="Correo Electrónico"
+              value={email}
+              onChange={setEmail}
+              type="email"
+              placeholder="ejemplo@email.com"
+            />
 
-            <div className="form-group mb-5">
-              <label className="form-label text-dark-blue">Contraseña</label>
-              <input
-                type="password"
-                className="form-control"
-                value={contraseña}
-                onChange={(e) => setContraseña(e.target.value)}
-                placeholder="••••••••"
-              />
-            </div>
+            <InputField
+              label="Contraseña"
+              value={contraseña}
+              onChange={setContraseña}
+              type="password"
+              placeholder="••••••••"
+            />
 
-            {error && <div className="alert alert-danger text-sm">{error}</div>}
+            {error && <ImcError error={error} />}
 
-            <button className="btn btn-primary w-100" type="submit" disabled={loading}>
+            <button
+              className="btn btn-primary w-100"
+              type="submit"
+              disabled={loading}
+            >
               {loading ? "Ingresando..." : "Iniciar Sesión"}
             </button>
           </form>
@@ -82,7 +82,11 @@ function InicioSesion({ onLoginSuccess }: Props) {
           <div className="mb-3">
             <div
               className="rounded-circle overflow-hidden mx-auto mb-3"
-              style={{ width: "80px", height: "80px", backgroundColor: "#0d6efd" }}
+              style={{
+                width: "80px",
+                height: "80px",
+                backgroundColor: "#0d6efd",
+              }}
             >
               <img
                 src={saludable}
@@ -91,25 +95,34 @@ function InicioSesion({ onLoginSuccess }: Props) {
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />
             </div>
-            <h3 className="fw-bold fs-5 text-dark">Tu Salud, Nuestra Prioridad</h3>
+            <h3 className="fw-bold fs-5 text-dark">
+              Tu Salud, Nuestra Prioridad
+            </h3>
           </div>
 
           <p className="text-muted mb-3">
-            Accedé a tu cuenta personalizada para realizar un seguimiento de tu índice de masa corporal y mantener un registro de tu progreso hacia una vida más saludable.
+            Accedé a tu cuenta personalizada para realizar un seguimiento de tu
+            índice de masa corporal y mantener un registro de tu progreso hacia
+            una vida más saludable.
           </p>
 
-          <ul className="list-unstyled text-start mx-auto" style={{ maxWidth: "250px" }}>
+          <ul
+            className="list-unstyled text-start mx-auto"
+            style={{ maxWidth: "250px" }}
+          >
             <li className="mb-2 d-flex align-items-center text-dark">
-              <div className="bg-primary rounded-circle me-2" style={{ width: "8px", height: "8px" }}></div>
+              <div
+                className="bg-primary rounded-circle me-2"
+                style={{ width: "8px", height: "8px" }}
+              ></div>
               <span className="small">Cálculos precisos de IMC</span>
             </li>
             <li className="mb-2 d-flex align-items-center text-dark">
-              <div className="bg-primary rounded-circle me-2" style={{ width: "8px", height: "8px" }}></div>
+              <div
+                className="bg-primary rounded-circle me-2"
+                style={{ width: "8px", height: "8px" }}
+              ></div>
               <span className="small">Historial de resultados</span>
-            </li>
-            <li className="mb-2 d-flex align-items-center text-dark">
-              <div className="bg-primary rounded-circle me-2" style={{ width: "8px", height: "8px" }}></div>
-              <span className="small">Recomendaciones personalizadas</span>
             </li>
           </ul>
         </div>
@@ -118,7 +131,10 @@ function InicioSesion({ onLoginSuccess }: Props) {
       <div className="mt-4 text-center text-white">
         <p className="small opacity-75">
           ¿No tenés una cuenta?{" "}
-          <Link to="/registro" className="text-white fw-bold text-decoration-underline">
+          <Link
+            to="/registro"
+            className="text-white fw-bold text-decoration-underline"
+          >
             Registrate haciendo click acá
           </Link>
         </p>

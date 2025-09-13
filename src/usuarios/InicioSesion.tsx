@@ -1,33 +1,31 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import saludable from "../assets/saludable.png";
 import { login } from "../services/authService";
 import ImcError from "../components/ImcError";
 import { InputField } from "../components/InputField";
+import { useAuth } from "../hooks/useAuth";
 
-type Props = {
-  onLoginSuccess: () => void;
-};
-
-function InicioSesion({ onLoginSuccess }: Props) {
+function InicioSesion() {
+  const { login: authLogin } = useAuth();
   const [email, setEmail] = useState("");
   const [contraseña, setContraseña] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     if (!email || !contraseña) {
       setError("Por favor completá todos los campos.");
       return;
     }
     setLoading(true);
     setError("");
-
     try {
       await login(email, contraseña);
-      onLoginSuccess();
+      authLogin();
+      navigate("/imc/calcular");
     } catch (err: any) {
       setError("El usuario no existe o la contraseña es incorrecta");
     } finally {

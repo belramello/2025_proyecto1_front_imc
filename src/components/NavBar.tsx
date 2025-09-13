@@ -10,8 +10,8 @@ function Navbar() {
 
   return (
     <nav
-      className="navbar navbar-expand-lg navbar-dark px-4 shadow-sm"
-      style={{ backgroundColor: "#072c6c" }} // ✅ más oscuro
+      className="navbar navbar-expand-lg navbar-dark px-4 shadow-sm fixed-top"
+      style={{ backgroundColor: "#009fb0" }}
     >
       <div className="container-fluid">
         <Link className="navbar-brand fw-bold" to="/imc/calcular">

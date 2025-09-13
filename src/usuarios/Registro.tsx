@@ -1,45 +1,42 @@
 import React, { useState } from "react";
-import saludable from "../assets/saludable.png";
 import { register } from "../services/authService";
-import { useNavigate } from "react-router-dom";
 import ImcError from "../components/ImcError";
 import { InputField } from "../components/InputField";
-interface RegistroProps {
-  onCancelar: () => void;
-  onRegistrar: (nombre: string, email: string, contraseña: string) => void;
-}
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
-function Registro({ onCancelar }: RegistroProps) {
+function Registro() {
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [contraseña, setContraseña] = useState("");
   const [error, setError] = useState("");
-  const [, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login: authLogin } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    setLoading(true);
 
     if (!nombre || !email || !contraseña) {
       setError("Por favor completa todos los campos.");
-      setLoading(false);
       return;
     }
-
+    setLoading(true);
     try {
       await register(nombre, email, contraseña);
-
-      navigate("/inicio-sesion");
+      authLogin();
+      navigate("/calcular-imc");
     } catch (err: any) {
       setError(
         err.message || "Error al registrar usuario. Intenta nuevamente."
       );
       console.error("Error en el registro:", err);
-    } finally {
-      setLoading(false);
     }
+  };
+
+  const onCancelar = () => {
+    navigate("/inicio-sesion");
   };
 
   return (
@@ -58,21 +55,21 @@ function Registro({ onCancelar }: RegistroProps) {
           style={{ maxWidth: "400px" }}
         >
           <InputField
-            label="NOMBRE"
+            label="Nombre"
             value={nombre}
             onChange={setNombre}
             placeholder="Ejemplo: Juan"
             type="text"
           />
           <InputField
-            label="CORREO ELECTRÓNICO"
+            label="Correo Electrónico"
             value={email}
             onChange={setEmail}
             type="email"
             placeholder="ejemplo@email.com"
           />
           <InputField
-            label="CONTRASEÑA"
+            label="Contraseña"
             value={contraseña}
             onChange={setContraseña}
             type="password"
@@ -91,7 +88,7 @@ function Registro({ onCancelar }: RegistroProps) {
               type="submit"
               className="btn btn-primary flex-grow-1 ms-2 custom-button-style"
             >
-              Guardar Cambios
+              {loading ? "Registrando..." : "Registrarse"}
             </button>
           </div>
         </form>

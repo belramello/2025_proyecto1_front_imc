@@ -7,6 +7,12 @@
 
 .main-bg-color {
   background-color: var(--main-dark-blue);
+  min-height: 100vh;
+}
+
+/* También puedes usar vw para que sea responsivo */
+.pt-custom-responsive {
+  padding-top: 6vw;
 }
 
 .card-container {

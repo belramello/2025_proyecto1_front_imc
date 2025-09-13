@@ -1,11 +1,15 @@
 export const guardarToken = (
   accessToken: string,
-  refreshToken: string | null
+  refreshToken: string | null,
+  nombreUsuario?: string
 ) => {
   try {
     localStorage.setItem("accessToken", accessToken);
     if (refreshToken !== null) {
       localStorage.setItem("refreshToken", refreshToken);
+    }
+    if (nombreUsuario) {
+      localStorage.setItem("nombreUsuario", nombreUsuario);
     }
   } catch (error) {
     console.error("Error al guardar tokens:", error);
@@ -30,10 +34,11 @@ export const obtenerRefreshToken = (): string | null => {
   }
 };
 
-export const eliminarTokens = () => {
+export const eliminarTokens = (): void => {
   try {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
+    localStorage.removeItem("nombreUsuario");
   } catch (error) {
     console.error("Error al eliminar tokens:", error);
   }

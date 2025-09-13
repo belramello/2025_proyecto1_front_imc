@@ -1,5 +1,23 @@
 import { useState, useEffect } from "react";
-import { obtenerToken } from "../utils/storage";
+import { obtenerToken, eliminarTokens } from "../utils/storage";
+
+interface JwtPayload {
+  exp?: number;
+}
+
+// Función para validar JWT (sin librerías externas)
+const isValidJwt = (token: string | null): boolean => {
+  if (!token) return false;
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1])) as JwtPayload;
+    if (!payload.exp) return false;
+    // Verifica si el token está expirado (exp es en segundos)
+    return payload.exp * 1000 > Date.now();
+  } catch (error) {
+    console.error("Error al parsear JWT:", error);
+    return false;
+  }
+};
 
 export const useAuth = () => {
   const [isAuth, setIsAuth] = useState(false);
@@ -8,10 +26,10 @@ export const useAuth = () => {
   useEffect(() => {
     const checkAuth = () => {
       const token = obtenerToken();
-      if (typeof token === "string" && token.length > 0) {
+      if (token && isValidJwt(token)) {
         setIsAuth(true);
       } else {
-        localStorage.removeItem("accessToken");
+        eliminarTokens();
         setIsAuth(false);
       }
       setIsLoading(false);
@@ -19,19 +37,14 @@ export const useAuth = () => {
 
     checkAuth();
 
-    // Listener para cambios en storage (e.g., login en otra pestaña)
+    // Listener para cambios en storage (e.g., logout en otra pestaña)
     const handleStorageChange = () => checkAuth();
     window.addEventListener("storage", handleStorageChange);
 
     return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
-  const iniciarSesion = () => setIsAuth(true);
-  const logout = () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken"); // Si usas refresh
-    setIsAuth(false);
-  };
+  const login = () => setIsAuth(true);
 
-  return { isAuth, isLoading, iniciarSesion, logout };
+  return { isAuth, isLoading, login };
 };

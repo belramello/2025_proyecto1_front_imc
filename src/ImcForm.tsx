@@ -49,7 +49,7 @@ function ImcForm() {
             clasificación de peso.
           </p>
         </div>
-        <div className="card-container shadow-lg d-flex">
+        <div className="card-container shadow-lg d-flex flex-column flex-lg-row">
           <div className="left-panel p-4 d-flex flex-column justify-content-center pd-5">
             <form onSubmit={handleSubmit}>
               <InputField

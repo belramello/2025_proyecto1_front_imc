@@ -49,81 +49,94 @@ const Historial: React.FC = () => {
 
   return (
     <>
-      <div className="main-bg-color min-vh-100 d-flex flex-column align-items-center justify-content-center">
+      <div className="main-bg-color min-vh-100 d-flex flex-column align-items-center justify-content-center pt-5 mt-5">
         <div className="text-center text-white mb-4">
           <h1 className="fw-bold fs-2">Historial de Cálculos de IMC</h1>
         </div>
         <div className="card-container shadow-lg d-flex mb-4">
           <div className="p-4 w-100 text-center">
-            <div className="mb-2 ">
-              <label className="text-dark-blue me-2">Desde:</label>
-              <input
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                className="form-control d-inline-block w-auto"
-              />
-              <label className="ms-3 text-dark-blue me-2">Hasta:</label>
-              <input
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                className="form-control d-inline-block w-auto"
-              />
-              <button className="btn btn-primary ms-2" onClick={handleFilter}>
-                Filtrar
-              </button>
+            <div className="mb-3 row g-2 justify-content-center">
+              <div className="col-12 col-md-auto">
+                <label className="text-dark-blue me-2">Desde:</label>
+                <input
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  className="form-control"
+                />
+              </div>
+              <div className="col-12 col-md-auto">
+                <label className="text-dark-blue me-2">Hasta:</label>
+                <input
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  className="form-control"
+                />
+              </div>
+              <div className="col-12 col-md-auto d-flex align-items-end">
+                <button
+                  className="btn btn-primary w-100"
+                  onClick={handleFilter}
+                >
+                  Filtrar
+                </button>
+              </div>
             </div>
+
             {error && <ImcError error={error} />}
+
             {loading ? (
               <div className="spinner-border text-primary" role="status">
                 <span className="sr-only"></span>
               </div>
             ) : (
-              <table className="table table-striped">
-                <thead>
-                  <tr>
-                    <th>Fecha</th>
-                    <th>Peso (kg)</th>
-                    <th>Altura (m)</th>
-                    <th>IMC</th>
-                    <th>Categoría</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {!loading && filteredHistoriales.length === 0 ? (
+              <div className="table-responsive">
+                <table className="table table-striped">
+                  <thead>
                     <tr>
-                      <td colSpan={5} className="text-center text-muted">
-                        No hay cálculos registrados para este usuario o en el
-                        rango seleccionado.
-                      </td>
+                      <th>Fecha</th>
+                      <th>Peso (kg)</th>
+                      <th>Altura (m)</th>
+                      <th>IMC</th>
+                      <th>Categoría</th>
                     </tr>
-                  ) : (
-                    filteredHistoriales.map((historial) => (
-                      <tr key={historial.id}>
-                        <td>
-                          {new Date(historial.fechaHora).toLocaleString(
-                            "es-AR",
-                            {
-                              timeZone: "UTC",
-                            }
-                          )}
-                        </td>
-                        <td>{historial.peso}</td>
-                        <td>{historial.altura}</td>
-                        <td>{historial.imc.toFixed(2)}</td>
-                        <td>
-                          <span
-                            className={getCategoriaColor(historial.categoria)}
-                          >
-                            {historial.categoria}
-                          </span>
+                  </thead>
+                  <tbody>
+                    {!loading && filteredHistoriales.length === 0 ? (
+                      <tr>
+                        <td colSpan={5} className="text-center text-muted">
+                          No hay cálculos registrados para este usuario o en el
+                          rango seleccionado.
                         </td>
                       </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
+                    ) : (
+                      filteredHistoriales.map((historial) => (
+                        <tr key={historial.id}>
+                          <td>
+                            {new Date(historial.fechaHora).toLocaleString(
+                              "es-AR",
+                              {
+                                timeZone: "UTC",
+                              }
+                            )}
+                          </td>
+                          <td>{historial.peso}</td>
+                          <td>{historial.altura}</td>
+                          <td>{historial.imc.toFixed(2)}</td>
+                          <td>
+                            <span
+                              className={getCategoriaColor(historial.categoria)}
+                            >
+                              {historial.categoria}
+                            </span>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
             )}
           </div>
         </div>

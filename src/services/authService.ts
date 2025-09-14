@@ -56,7 +56,7 @@ export const register = async (
 export const cerrarSesion = () => {
   try {
     eliminarTokens();
-    window.location.href = "iniciar-sesion";
+    window.location.href = "inicio-sesion";
   } catch (error) {
     console.error("Error al cerrar sesión");
   }

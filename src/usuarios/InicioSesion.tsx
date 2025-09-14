@@ -5,7 +5,7 @@ import { login } from "../services/authService";
 import ImcError from "../components/ImcError";
 import { InputField } from "../components/InputField";
 import { useAuth } from "../hooks/useAuth";
-import "../usuarios/estilos.css"
+import "../usuarios/estilos.css";
 
 function InicioSesion() {
   const { login: authLogin } = useAuth();
@@ -43,7 +43,7 @@ function InicioSesion() {
         </p>
       </div>
 
-      <div className="card-container shadow-lg d-flex">
+      <div className="card-container shadow-lg d-flex flex-column flex-lg-row">
         <div className="left-panel p-4 d-flex flex-column justify-content-center">
           <form onSubmit={handleSubmit}>
             <InputField
@@ -61,7 +61,11 @@ function InicioSesion() {
               placeholder="••••••••"
             />
             {error && <ImcError error={error} />}
-            <button className="btn btn-primary w-100" type="submit" disabled={loading}>
+            <button
+              className="btn btn-primary w-100"
+              type="submit"
+              disabled={loading}
+            >
               {loading ? "Ingresando..." : "Iniciar Sesión"}
             </button>
           </form>
@@ -72,10 +76,14 @@ function InicioSesion() {
             <div className="user-image mb-3">
               <img src={saludable} alt="Usuario" />
             </div>
-            <h3 className="fw-bold fs-5 text-dark">Tu Salud, Nuestra Prioridad</h3>
+            <h3 className="fw-bold fs-5 text-dark">
+              Tu Salud, Nuestra Prioridad
+            </h3>
           </div>
           <p className="text-muted mb-3 text-center">
-            Accedé a tu cuenta personalizada para realizar un seguimiento de tu índice de masa corporal y mantener un registro de tu progreso hacia una vida más saludable.
+            Accedé a tu cuenta personalizada para realizar un seguimiento de tu
+            índice de masa corporal y mantener un registro de tu progreso hacia
+            una vida más saludable.
           </p>
           <ul className="feature-list">
             <li>
@@ -93,7 +101,10 @@ function InicioSesion() {
       <div className="mt-4 text-center text-white">
         <p className="small opacity-75">
           ¿No tenés una cuenta?{" "}
-          <Link to="/registro" className="text-white fw-bold text-decoration-underline">
+          <Link
+            to="/registro"
+            className="text-white fw-bold text-decoration-underline"
+          >
             Registrate haciendo click acá
           </Link>
         </p>

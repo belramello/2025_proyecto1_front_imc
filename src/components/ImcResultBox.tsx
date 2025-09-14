@@ -18,7 +18,7 @@ function getCategoriaColor(categoria: string) {
   }
 }
 
-const ImcResult: React.FC<Props> = ({ imc, categoria }) => {
+const ImcResultBox: React.FC<Props> = ({ imc, categoria }) => {
   const colorClass = getCategoriaColor(categoria);
 
   return (
@@ -35,4 +35,4 @@ const ImcResult: React.FC<Props> = ({ imc, categoria }) => {
   );
 };
 
-export default ImcResult;
+export default ImcResultBox;

@@ -7,6 +7,12 @@
 
 .main-bg-color {
   background-color: var(--main-dark-blue);
+  min-height: 100vh;
+}
+
+/* También puedes usar vw para que sea responsivo */
+.pt-custom-responsive {
+  padding-top: 6vw;
 }
 
 .card-container {
@@ -16,6 +22,17 @@
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   max-width: 900px;
+  width: 90%;
+  padding: 0;
+}
+
+.card-container-register {
+  display: flex;
+  background-color: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  max-width: 500px;
   width: 90%;
   padding: 0;
 }

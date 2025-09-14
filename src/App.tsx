@@ -1,9 +1,11 @@
+// src/App.tsx
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import ImcForm from "./ImcForm";
 import InicioSesion from "./usuarios/InicioSesion";
 import Registro from "./usuarios/Registro";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { PublicRoute } from "./components/PublicRoute";
+import History from "./components/ImcHistorial";
 
 function App() {
   return (
@@ -37,7 +39,14 @@ function App() {
             </PublicRoute>
           }
         />
-
+        <Route
+          path="/historial"
+          element={
+            <ProtectedRoute>
+              <History/>
+            </ProtectedRoute>
+          }
+        />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import ImcError from "./components/ImcError";
-import Navbar from "./components/NavBar";
 import ImcResultBox from "./components/ImcResultBox";
 import { ImcResult } from "./interfaces/ImcResult";
 import { calcularImc } from "./services/imcService";
@@ -40,7 +39,6 @@ function ImcForm() {
 
   return (
     <>
-      <Navbar />
       <div className="main-bg-color min-vh-100 d-flex flex-column align-items-center justify-content-center pt-custom-responsive">
         <div className="text-center text-white mb-4">
           <h1 className="fw-bold fs-2">

@@ -5,7 +5,8 @@ import InicioSesion from "./usuarios/InicioSesion";
 import Registro from "./usuarios/Registro";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { PublicRoute } from "./components/PublicRoute";
-import History from "./components/ImcHistorial";
+import Historial from "./components/ImcHistorial";
+import NavBar from "./components/NavBar";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           path="/imc/calcular"
           element={
             <ProtectedRoute>
+              <NavBar />
               <ImcForm />
             </ProtectedRoute>
           }
@@ -43,7 +45,8 @@ function App() {
           path="/historial"
           element={
             <ProtectedRoute>
-              <History/>
+              <NavBar />
+              <Historial />
             </ProtectedRoute>
           }
         />

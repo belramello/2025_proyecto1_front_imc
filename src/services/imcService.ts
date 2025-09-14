@@ -1,4 +1,4 @@
-import { Calculation } from "../interfaces/Calculation";
+import { HistorialDTO } from "../interfaces/historial-dto";
 import { ImcResult } from "../interfaces/ImcResult";
 import api from "./api";
 
@@ -21,11 +21,9 @@ export const calcularImc = async (
   }
 };
 
-
-export const getHistory = async (): Promise<Calculation[]> => {
+export const getHistoriales = async (): Promise<HistorialDTO[]> => {
   try {
-    const { data } = await api.get<Calculation[]>("/historial");
-    console.log("data historial", data);
+    const { data } = await api.get<HistorialDTO[]>("/historial");
     return data;
   } catch (error: any) {
     throw new Error(

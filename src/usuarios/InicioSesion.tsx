@@ -5,6 +5,7 @@ import { login } from "../services/authService";
 import ImcError from "../components/ImcError";
 import { InputField } from "../components/InputField";
 import { useAuth } from "../hooks/useAuth";
+import "../usuarios/estilos.css"
 
 function InicioSesion() {
   const { login: authLogin } = useAuth();
@@ -43,10 +44,7 @@ function InicioSesion() {
       </div>
 
       <div className="card-container shadow-lg d-flex">
-        <div
-          className="left-panel p-4 d-flex flex-column justify-content-center"
-          style={{ minWidth: "300px" }}
-        >
+        <div className="left-panel p-4 d-flex flex-column justify-content-center">
           <form onSubmit={handleSubmit}>
             <InputField
               label="Correo Electrónico"
@@ -55,7 +53,6 @@ function InicioSesion() {
               type="email"
               placeholder="ejemplo@email.com"
             />
-
             <InputField
               label="Contraseña"
               value={contraseña}
@@ -63,63 +60,30 @@ function InicioSesion() {
               type="password"
               placeholder="••••••••"
             />
-
             {error && <ImcError error={error} />}
-
-            <button
-              className="btn btn-primary w-100"
-              type="submit"
-              disabled={loading}
-            >
+            <button className="btn btn-primary w-100" type="submit" disabled={loading}>
               {loading ? "Ingresando..." : "Iniciar Sesión"}
             </button>
           </form>
         </div>
 
-        <div className="right-panel p-4 text-center">
-          <div className="mb-3">
-            <div
-              className="rounded-circle overflow-hidden mx-auto mb-3"
-              style={{
-                width: "80px",
-                height: "80px",
-                backgroundColor: "#0d6efd",
-              }}
-            >
-              <img
-                src={saludable}
-                alt="Usuario"
-                className="img-fluid"
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              />
+        <div className="right-panel p-4">
+          <div className="text-center mb-3">
+            <div className="user-image mb-3">
+              <img src={saludable} alt="Usuario" />
             </div>
-            <h3 className="fw-bold fs-5 text-dark">
-              Tu Salud, Nuestra Prioridad
-            </h3>
+            <h3 className="fw-bold fs-5 text-dark">Tu Salud, Nuestra Prioridad</h3>
           </div>
-
-          <p className="text-muted mb-3">
-            Accedé a tu cuenta personalizada para realizar un seguimiento de tu
-            índice de masa corporal y mantener un registro de tu progreso hacia
-            una vida más saludable.
+          <p className="text-muted mb-3 text-center">
+            Accedé a tu cuenta personalizada para realizar un seguimiento de tu índice de masa corporal y mantener un registro de tu progreso hacia una vida más saludable.
           </p>
-
-          <ul
-            className="list-unstyled text-start mx-auto"
-            style={{ maxWidth: "250px" }}
-          >
-            <li className="mb-2 d-flex align-items-center text-dark">
-              <div
-                className="bg-primary rounded-circle me-2"
-                style={{ width: "8px", height: "8px" }}
-              ></div>
+          <ul className="feature-list">
+            <li>
+              <div className="dot"></div>
               <span className="small">Cálculos precisos de IMC</span>
             </li>
-            <li className="mb-2 d-flex align-items-center text-dark">
-              <div
-                className="bg-primary rounded-circle me-2"
-                style={{ width: "8px", height: "8px" }}
-              ></div>
+            <li>
+              <div className="dot"></div>
               <span className="small">Historial de resultados</span>
             </li>
           </ul>
@@ -129,10 +93,7 @@ function InicioSesion() {
       <div className="mt-4 text-center text-white">
         <p className="small opacity-75">
           ¿No tenés una cuenta?{" "}
-          <Link
-            to="/registro"
-            className="text-white fw-bold text-decoration-underline"
-          >
+          <Link to="/registro" className="text-white fw-bold text-decoration-underline">
             Registrate haciendo click acá
           </Link>
         </p>

@@ -21,16 +21,21 @@ const isValidJwt = (token: string | null): boolean => {
 
 export const useAuth = () => {
   const [isAuth, setIsAuth] = useState(false);
+  const [nombre, setNombre] = useState<string | null>(null); // Nuevo estado para nombre
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const checkAuth = () => {
       const token = obtenerToken();
-      if (token && isValidJwt(token)) {
+      const storedNombre = localStorage.getItem("nombreUsuario"); // Carga nombre de localStorage
+      if (token && isValidJwt(token) && storedNombre) {
         setIsAuth(true);
+        setNombre(storedNombre); // Setea nombre si token es válido
       } else {
         eliminarTokens();
+        localStorage.removeItem("nombreUsuario"); // Limpia nombre si no autenticado
         setIsAuth(false);
+        setNombre(null);
       }
       setIsLoading(false);
     };
@@ -44,7 +49,21 @@ export const useAuth = () => {
     return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
-  const login = () => setIsAuth(true);
+  // Función login actualizada: setea isAuth y nombre, y sincroniza localStorage
+  const login = (newNombre: string) => {
+    setIsAuth(true);
+    setNombre(newNombre);
+    localStorage.setItem("nombreUsuario", newNombre); // Sincroniza con localStorage
+  };
 
-  return { isAuth, isLoading, login };
+  // Agrega una función logout para consistencia (opcional, pero útil)
+  const logout = () => {
+    eliminarTokens();
+    window.location.href = "/inicio-sesion"; // Redirige al login
+    localStorage.removeItem("nombreUsuario");
+    setIsAuth(false);
+    setNombre(null);
+  };
+
+  return { isAuth, isLoading, nombre, login, logout }; // Exporta nombre y logout
 };

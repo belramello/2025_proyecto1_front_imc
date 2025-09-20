@@ -7,9 +7,11 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import { PublicRoute } from "./components/PublicRoute";
 import Historial from "./components/ImcHistorial";
 import NavBar from "./components/NavBar";
+import { AuthProvider } from "./hooks/AuthContext";
 
 function App() {
   return (
+    <AuthProvider>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Navigate to="/imc/calcular" replace />} />
@@ -53,6 +55,7 @@ function App() {
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
+    </AuthProvider>
   );
 }
 

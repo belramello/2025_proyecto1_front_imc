@@ -2,7 +2,7 @@ import { RespuestaUserDto } from "../types/respuesta-user.dto";
 import { eliminarTokens, guardarToken } from "../utils/storage";
 import api from "./api";
 
-export const login = async (email: string, contraseña: string) => {
+export const login = async (email: string, contraseña: string): Promise<string> => {
   try {
     const response = await api.post<{
       accessToken: string;
@@ -11,7 +11,7 @@ export const login = async (email: string, contraseña: string) => {
     }>("/auth/login", { email, contraseña });
     const { accessToken, refreshToken, user } = response.data;
     guardarToken(accessToken, refreshToken, user.nombre);
-    localStorage.setItem("nombreUsuario", user.nombre);
+    return user.nombre;
   } catch (error) {
     console.error("Error al iniciar sesión:", error);
     throw error;
@@ -56,6 +56,7 @@ export const register = async (
 export const cerrarSesion = () => {
   try {
     eliminarTokens();
+    localStorage.removeItem("nombreUsuario");
     window.location.href = "inicio-sesion";
   } catch (error) {
     console.error("Error al cerrar sesión");

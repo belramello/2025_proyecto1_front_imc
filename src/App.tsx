@@ -7,6 +7,7 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import { PublicRoute } from "./components/PublicRoute";
 import Historial from "./components/ImcHistorial";
 import NavBar from "./components/NavBar";
+import Dashboard from "./components/Dashboard";
 
 function App() {
   return (
@@ -47,6 +48,15 @@ function App() {
             <ProtectedRoute>
               <NavBar />
               <Historial />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/analiticas"
+          element={
+            <ProtectedRoute>
+              <NavBar />
+              <Dashboard />
             </ProtectedRoute>
           }
         />

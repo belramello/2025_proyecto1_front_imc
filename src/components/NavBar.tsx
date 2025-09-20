@@ -42,6 +42,11 @@ function Navbar() {
                 Historial
               </Link>
             </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/analiticas">
+                Analíticas
+              </Link>
+            </li>
           </ul>
 
           <div className="d-flex align-items-center">

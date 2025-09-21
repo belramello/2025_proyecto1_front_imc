@@ -32,7 +32,7 @@ function InicioSesion() {
       const nombre = await login(email, contraseña); // Obtén el nombre del servicio
       authLogin(nombre); // Actualiza el contexto con el nombre
       setTimeout(() => {
-        navigate("/imc/calcular"); // Delay de 0ms fuerza un nuevo ciclo de render
+        navigate("/imc/calcular");
       }, 0);
     } catch (err: any) {
       setError("El usuario no existe o la contraseña es incorrecta");

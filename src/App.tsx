@@ -9,7 +9,9 @@ import Historial from "./components/ImcHistorial";
 import NavBar from "./components/NavBar";
 import { AuthProvider } from "./contexts/AuthContext";
 import Dashboard from "./components/Dashboard";
-import RecuperarContraseña from "./usuarios/RecuperarContraseña";
+import RecuperarContraseña from "./usuarios/Recuperarcontraseña";
+import NuevaContraseña from "./usuarios/Nuevacontraseña";
+
 
 function App() {
   return (
@@ -53,6 +55,16 @@ function App() {
               </PublicRoute>
             }
           />
+          <Route
+            path="/reset-password"
+            element={
+              <PublicRoute>
+                <NuevaContraseña />
+              </PublicRoute>
+            }
+          />
+
+       
           <Route
             path="/historial"
             element={

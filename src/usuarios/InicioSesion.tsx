@@ -76,6 +76,13 @@ function InicioSesion() {
               {loading ? "Ingresando..." : "Iniciar Sesión"}
             </button>
           </form>
+
+          <div className="mt-4 text-center text-white">
+         
+          
+            <Link to="/cambiarContraseña" className="text-darkblue fw-bold text-decoration-underline">Olvidé mi contraseña</Link>
+         
+          </div>
         </div>
 
         <div className="right-panel p-4">

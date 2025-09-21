@@ -3,22 +3,26 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { HistorialDTO } from "../interfaces/historial-dto";
 import { getHistoriales } from "../services/imcService";
 import ImcError from "./ImcError";
+import Pagination from "./Pagination";
 
 const Historial: React.FC = () => {
   const [historiales, setHistoriales] = useState<HistorialDTO[]>([]);
-  const [filteredHistoriales, setFilteredHistoriales] = useState<
-    HistorialDTO[]
-  >([]);
+  const [filteredHistoriales, setFilteredHistoriales] = useState<HistorialDTO[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
+
+  const [page, setPage] = useState(1);
+  const [limit] = useState(5);
+  const [totalPages, setTotalPages] = useState(1);
 
   const fetchHistorial = async () => {
     try {
       const data = await getHistoriales();
       setHistoriales(data);
       setFilteredHistoriales(data);
+      setTotalPages(Math.ceil(data.length / limit));
       setError(null);
     } catch (err) {
       setError(
@@ -35,63 +39,59 @@ const Historial: React.FC = () => {
     fetchHistorial();
   }, []);
 
-  //filtra los historiales de acuerdo a las fechas de inicio y fin seleccionadas.
   const handleFilter = () => {
     const start = startDate ? new Date(startDate + "T00:00:00Z") : null;
-    let end = endDate ? new Date(endDate + "T23:59:59.999Z") : null;
+    const end = endDate ? new Date(endDate + "T23:59:59.999Z") : null;
+
     const filtered = historiales.filter((historial) => {
       const calcDate = new Date(historial.fechaHora);
       return (!start || calcDate >= start) && (!end || calcDate <= end);
     });
 
     setFilteredHistoriales(filtered);
+    setPage(1);
+    setTotalPages(Math.ceil(filtered.length / limit));
   };
+
+  const paginatedFiltered = filteredHistoriales.slice(
+    (page - 1) * limit,
+    page * limit
+  );
 
   return (
     <>
-      <div className="main-bg-color min-vh-100 d-flex flex-column align-items-center justify-content-center pt-5 mt-5">
+      <div className="main-bg-color min-vh-100 d-flex flex-column align-items-center justify-content-center">
         <div className="text-center text-white mb-4">
           <h1 className="fw-bold fs-2">Historial de Cálculos de IMC</h1>
         </div>
         <div className="card-container shadow-lg d-flex mb-4">
           <div className="p-4 w-100 text-center">
-            <div className="mb-3 row g-2 justify-content-center">
-              <div className="col-12 col-md-auto">
-                <label className="text-dark-blue me-2">Desde:</label>
-                <input
-                  type="date"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                  className="form-control"
-                />
-              </div>
-              <div className="col-12 col-md-auto">
-                <label className="text-dark-blue me-2">Hasta:</label>
-                <input
-                  type="date"
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                  className="form-control"
-                />
-              </div>
-              <div className="col-12 col-md-auto d-flex align-items-end">
-                <button
-                  className="btn btn-primary w-100"
-                  onClick={handleFilter}
-                >
-                  Filtrar
-                </button>
-              </div>
+            <div className="mb-2 ">
+              <label className="text-dark-blue me-2">Desde:</label>
+              <input
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                className="form-control d-inline-block w-auto"
+              />
+              <label className="ms-3 text-dark-blue me-2">Hasta:</label>
+              <input
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                className="form-control d-inline-block w-auto"
+              />
+              <button className="btn btn-primary ms-2" onClick={handleFilter}>
+                Filtrar
+              </button>
             </div>
-
             {error && <ImcError error={error} />}
-
             {loading ? (
               <div className="spinner-border text-primary" role="status">
                 <span className="sr-only"></span>
               </div>
             ) : (
-              <div className="table-responsive">
+              <>
                 <table className="table table-striped">
                   <thead>
                     <tr>
@@ -103,7 +103,7 @@ const Historial: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {!loading && filteredHistoriales.length === 0 ? (
+                    {!loading && paginatedFiltered.length === 0 ? (
                       <tr>
                         <td colSpan={5} className="text-center text-muted">
                           No hay cálculos registrados para este usuario o en el
@@ -111,23 +111,19 @@ const Historial: React.FC = () => {
                         </td>
                       </tr>
                     ) : (
-                      filteredHistoriales.map((historial) => (
+                      paginatedFiltered.map((historial) => (
                         <tr key={historial.id}>
                           <td>
                             {new Date(historial.fechaHora).toLocaleString(
                               "es-AR",
-                              {
-                                timeZone: "UTC",
-                              }
+                              { timeZone: "UTC" }
                             )}
                           </td>
                           <td>{historial.peso}</td>
                           <td>{historial.altura}</td>
                           <td>{historial.imc.toFixed(2)}</td>
                           <td>
-                            <span
-                              className={getCategoriaColor(historial.categoria)}
-                            >
+                            <span className={getCategoriaColor(historial.categoria)}>
                               {historial.categoria}
                             </span>
                           </td>
@@ -136,7 +132,12 @@ const Historial: React.FC = () => {
                     )}
                   </tbody>
                 </table>
-              </div>
+                <Pagination
+                  currentPage={page}
+                  totalPages={totalPages}
+                  onPageChange={setPage}
+                />
+              </>
             )}
           </div>
         </div>

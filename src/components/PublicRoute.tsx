@@ -1,13 +1,17 @@
-import { ReactNode } from "react";
+import { ReactNode, useContext } from "react";
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
+import { AuthContext } from "../contexts/AuthContext";
 
 interface PublicRouteProps {
   children: ReactNode;
 }
 
 export const PublicRoute = ({ children }: PublicRouteProps) => {
-  const { isAuth, isLoading } = useAuth();
+  const authContext = useContext(AuthContext); // Usa useContext
+  if (!authContext) {
+    throw new Error("Navbar debe estar dentro de AuthProvider");
+  }
+  const { isLoading, isAuth } = authContext; // Desestructura
 
   if (isLoading) {
     return (

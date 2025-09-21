@@ -1,14 +1,19 @@
 import { Link } from "react-router-dom";
 import { useContext } from "react";
-import { AuthContext } from "../hooks/AuthContext";
-
+import { AuthContext } from "../contexts/AuthContext";
+import { cerrarSesion } from "../services/authService";
 
 function Navbar() {
   const authContext = useContext(AuthContext); // Usa useContext
   if (!authContext) {
-    throw new Error('Navbar debe estar dentro de AuthProvider');
+    throw new Error("Navbar debe estar dentro de AuthProvider");
   }
   const { nombre, logout } = authContext; // Desestructura
+
+  const handleLogout = () => {
+    cerrarSesion();
+    logout();
+  };
 
   return (
     <nav
@@ -52,7 +57,7 @@ function Navbar() {
             </span>
             <button
               className="btn btn-outline-light btn-sm"
-              onClick={logout} // Usa la función del contexto
+              onClick={handleLogout} // Usa la función del contexto
             >
               Cerrar sesión
             </button>

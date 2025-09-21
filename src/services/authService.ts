@@ -2,7 +2,10 @@ import { RespuestaUserDto } from "../types/respuesta-user.dto";
 import { eliminarTokens, guardarToken } from "../utils/storage";
 import api from "./api";
 
-export const login = async (email: string, contraseña: string): Promise<string> => {
+export const login = async (
+  email: string,
+  contraseña: string
+): Promise<string> => {
   try {
     const response = await api.post<{
       accessToken: string;
@@ -56,7 +59,6 @@ export const register = async (
 export const cerrarSesion = () => {
   try {
     eliminarTokens();
-    localStorage.removeItem("nombreUsuario");
     window.location.href = "inicio-sesion";
   } catch (error) {
     console.error("Error al cerrar sesión");

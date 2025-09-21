@@ -5,15 +5,15 @@ import { login } from "../services/authService";
 import ImcError from "../components/ImcError";
 import { InputField } from "../components/InputField";
 import "../usuarios/estilos.css";
-import { AuthContext } from "../hooks/AuthContext";
+import { AuthContext } from "../contexts/AuthContext";
 
 function InicioSesion() {
   const authContext = useContext(AuthContext); // Usa useContext explícitamente
   if (!authContext) {
-    throw new Error('InicioSesion debe estar dentro de AuthProvider'); // Chequeo para errores
+    throw new Error("InicioSesion debe estar dentro de AuthProvider"); // Chequeo para errores
   }
   const { login: authLogin } = authContext; // Desestructura lo que necesitas
-  
+
   const [email, setEmail] = useState("");
   const [contraseña, setContraseña] = useState("");
   const [error, setError] = useState("");
@@ -32,8 +32,8 @@ function InicioSesion() {
       const nombre = await login(email, contraseña); // Obtén el nombre del servicio
       authLogin(nombre); // Actualiza el contexto con el nombre
       setTimeout(() => {
-      navigate("/imc/calcular"); // Delay de 0ms fuerza un nuevo ciclo de render
-    }, 0);
+        navigate("/imc/calcular"); // Delay de 0ms fuerza un nuevo ciclo de render
+      }, 0);
     } catch (err: any) {
       setError("El usuario no existe o la contraseña es incorrecta");
     } finally {

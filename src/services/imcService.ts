@@ -11,8 +11,6 @@ export const calcularImc = async (
       altura,
       peso,
     });
-
-    console.log("data");
     return data;
   } catch (error: any) {
     throw new Error(

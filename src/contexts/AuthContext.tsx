@@ -1,5 +1,5 @@
-import { createContext, useState, useEffect, ReactNode } from 'react';
-import { obtenerToken, eliminarTokens } from '../utils/storage';
+import { createContext, useState, useEffect, ReactNode } from "react";
+import { obtenerToken, eliminarTokens } from "../utils/storage";
 
 // Interface JwtPayload (igual)
 interface JwtPayload {
@@ -10,11 +10,11 @@ interface JwtPayload {
 const isValidJwt = (token: string | null): boolean => {
   if (!token) return false;
   try {
-    const payload = JSON.parse(atob(token.split('.')[1])) as JwtPayload;
+    const payload = JSON.parse(atob(token.split(".")[1])) as JwtPayload;
     if (!payload.exp) return false;
     return payload.exp * 1000 > Date.now();
   } catch (error) {
-    console.error('Error al parsear JWT:', error);
+    console.error("Error al parsear JWT:", error);
     return false;
   }
 };
@@ -29,7 +29,9 @@ export interface AuthContextType {
 }
 
 // Contexto con valor default (usa undefined para forzar chequeo)
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(
+  undefined
+);
 
 // Provider que envuelve la app
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -39,16 +41,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const checkAuth = () => {
+      setIsLoading(true);
       const token = obtenerToken();
-      const storedNombre = localStorage.getItem('nombreUsuario');
-      console.log('checkAuth: token válido?', token && isValidJwt(token)); // Loggea si auth inicial es válido
-      console.log('checkAuth: nombre cargado', storedNombre);
+      const storedNombre = localStorage.getItem("nombreUsuario");
       if (token && isValidJwt(token) && storedNombre) {
         setIsAuth(true);
         setNombre(storedNombre);
       } else {
         eliminarTokens();
-        localStorage.removeItem('nombreUsuario');
+        localStorage.removeItem("nombreUsuario");
         setIsAuth(false);
         setNombre(null);
       }
@@ -56,24 +57,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     checkAuth();
-
+    // Listener para cambios en storage (e.g., logout en otra pestaña)
     const handleStorageChange = () => checkAuth();
-    window.addEventListener('storage', handleStorageChange);
-
-    return () => window.removeEventListener('storage', handleStorageChange);
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
   const login = (newNombre: string) => {
     setIsAuth(true);
     setNombre(newNombre);
-    localStorage.setItem('nombreUsuario', newNombre);
   };
 
   const logout = () => {
-  eliminarTokens(); // Limpia tokens
-  localStorage.removeItem('nombreUsuario'); // Limpia nombre
-  window.location.href = '/inicio-sesion'; // Redirige inmediatamente
-};
+    setIsAuth(false);
+    setNombre(null);
+  };
 
   return (
     <AuthContext.Provider value={{ isAuth, nombre, isLoading, login, logout }}>

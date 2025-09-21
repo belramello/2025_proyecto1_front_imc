@@ -10,6 +10,7 @@ interface InputFieldProps {
   min?: string;
   max?: string;
   placeholder?: string;
+  sublabel?: string;
 }
 
 export const InputField: React.FC<InputFieldProps> = ({
@@ -22,10 +23,17 @@ export const InputField: React.FC<InputFieldProps> = ({
   min,
   max,
   placeholder,
+  sublabel,
 }) => {
   return (
     <div className="form-group mb-4">
-      <label className="form-label text-dark-blue">{label}</label>
+      <div className="d-flex justify-content-between align-items-center mb-1">
+        <label className="form-label text-dark-blue m-0">{label}</label>
+        {sublabel && (
+          <span className="text-muted small  ms-3 me-4 ">{sublabel}</span>
+        )}
+      </div>
+
       <div className="d-flex align-items-center">
         <input
           type={type}

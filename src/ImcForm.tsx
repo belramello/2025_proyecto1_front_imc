@@ -60,6 +60,7 @@ function ImcForm() {
                 step="0.01"
                 min="0.1"
                 max="3"
+                sublabel="(entre 0,1 y 3 m)"
               />
               <InputField
                 label="TU PESO"
@@ -68,6 +69,7 @@ function ImcForm() {
                 unit="kg"
                 min="1"
                 max="500"
+                sublabel="(entre 1 y 500 kg)"
               />
               {error && <ImcError error={error} />}
 

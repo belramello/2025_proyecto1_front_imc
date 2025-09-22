@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface PaginationProps {
   currentPage: number;
@@ -22,64 +22,32 @@ const Pagination: React.FC<PaginationProps> = ({
   };
 
   return (
-    <div style={styles.container}>
-      <button
-        onClick={handlePrev}
-        disabled={currentPage === 1}
-        style={{
-          ...styles.button,
-          ...(currentPage === 1 ? styles.disabled : {}),
-        }}
-      >
-        ← Anterior
-      </button>
+    <nav aria-label="Historial paginación" className="mt-4">
+      <ul className="pagination justify-content-center flex-wrap">
+        <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+          <button className="page-link" onClick={handlePrev}>
+            ← Anterior
+          </button>
+        </li>
 
-      <span style={styles.pageInfo}>
-        Página <strong>{currentPage}</strong> de <strong>{totalPages}</strong>
-      </span>
+        <li className="page-item disabled d-flex align-items-center px-3">
+          <span className="fw-semibold text-primary">
+            Página {currentPage} de {totalPages}
+          </span>
+        </li>
 
-      <button
-        onClick={handleNext}
-        disabled={currentPage === totalPages}
-        style={{
-          ...styles.button,
-          ...(currentPage === totalPages ? styles.disabled : {}),
-        }}
-      >
-        Siguiente →
-      </button>
-    </div>
+        <li
+          className={`page-item ${
+            currentPage === totalPages ? "disabled" : ""
+          }`}
+        >
+          <button className="page-link" onClick={handleNext}>
+            Siguiente →
+          </button>
+        </li>
+      </ul>
+    </nav>
   );
-};
-
-const styles: Record<string, React.CSSProperties> = {
-  container: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: '1rem',
-    marginTop: '1.5rem',
-    flexWrap: 'wrap',
-  },
-  pageInfo: {
-    color: '#0d6efd',
-    fontWeight: 500,
-    fontSize: '1rem',
-  },
-  button: {
-    backgroundColor: '#0d6efd',
-    color: '#fff',
-    border: 'none',
-    padding: '0.5rem 1rem',
-    borderRadius: '0.375rem',
-    cursor: 'pointer',
-    fontWeight: 500,
-    transition: 'background-color 0.2s ease',
-  },
-  disabled: {
-    backgroundColor: '#6c757d',
-    cursor: 'not-allowed',
-  },
 };
 
 export default Pagination;

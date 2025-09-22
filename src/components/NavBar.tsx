@@ -8,8 +8,7 @@ function Navbar() {
   if (!authContext) {
     throw new Error("Navbar debe estar dentro de AuthProvider");
   }
-  const { nombre, logout } = authContext; // Desestructura
-
+  const { nombre, logout } = authContext;
   const handleLogout = () => {
     cerrarSesion();
     logout();
@@ -62,7 +61,7 @@ function Navbar() {
             </span>
             <button
               className="btn btn-outline-light btn-sm"
-              onClick={handleLogout} // Usa la función del contexto
+              onClick={handleLogout}
             >
               Cerrar sesión
             </button>

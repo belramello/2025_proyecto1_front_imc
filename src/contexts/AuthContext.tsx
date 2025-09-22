@@ -49,7 +49,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setNombre(storedNombre);
       } else {
         eliminarTokens();
-        localStorage.removeItem("nombreUsuario");
         setIsAuth(false);
         setNombre(null);
       }
@@ -57,10 +56,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     checkAuth();
-    // Listener para cambios en storage (e.g., logout en otra pestaña)
-    const handleStorageChange = () => checkAuth();
-    window.addEventListener("storage", handleStorageChange);
-    return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
   const login = (newNombre: string) => {

@@ -1,4 +1,3 @@
-// src/App.tsx
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import ImcForm from "./ImcForm";
 import InicioSesion from "./usuarios/InicioSesion";
@@ -9,9 +8,8 @@ import Historial from "./components/ImcHistorial";
 import NavBar from "./components/NavBar";
 import { AuthProvider } from "./contexts/AuthContext";
 import Dashboard from "./components/Dashboard";
-import RecuperarContraseña from "./usuarios/Recuperarcontraseña";
 import NuevaContraseña from "./usuarios/Nuevacontraseña";
-
+import RecuperarContraseña from "./usuarios/Recuperarcontraseña";
 
 function App() {
   return (
@@ -48,7 +46,7 @@ function App() {
             }
           />
           <Route
-            path="/cambiarContraseña"
+            path="/forgot-password"
             element={
               <PublicRoute>
                 <RecuperarContraseña />
@@ -64,7 +62,6 @@ function App() {
             }
           />
 
-       
           <Route
             path="/historial"
             element={

@@ -4,6 +4,7 @@ import { resetPassword } from "../services/usersService";
 import ImcError from "../components/ImcError";
 import { InputField } from "../components/InputField";
 import "../usuarios/estilos.css";
+import { ResetPasswordDto } from "../types/reset-password-dto";
 
 function NuevaContraseña() {
   const [newPassword, setNewPassword] = useState("");
@@ -33,10 +34,13 @@ function NuevaContraseña() {
       setError("Las contraseñas no coinciden.");
       return;
     }
-
     setLoading(true);
     try {
-      await resetPassword(token, newPassword);
+      const resetPasswordDto: ResetPasswordDto = {
+        token,
+        newPassword,
+      };
+      await resetPassword(resetPasswordDto);
       navigate("/inicio-sesion");
     } catch (err: any) {
       setError(err.message);
@@ -52,9 +56,9 @@ function NuevaContraseña() {
   return (
     <div className="main-bg-color min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
       <div className="card-container-register custom-card-shadow rounded-4 d-flex flex-column align-items-center p-4">
-        <div className="text-center text-dark-blue mb-3">
-          <h1 className="fw-bold fs-3">RECUPERAR CONTRASEÑA</h1>
-          <p className="opacity-75 fs-6">Ingresá los siguientes datos: </p>
+        <div className="text-center mb-3">
+          <h1 className="fw-bold fs-3 text-dark-blue">RECUPERAR CONTRASEÑA</h1>
+          <p className="opacity-75 fs-6">Ingrese una nueva contraseña</p>
         </div>
 
         <form onSubmit={handleSubmit} className="form-register">

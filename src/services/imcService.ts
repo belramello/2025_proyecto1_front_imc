@@ -1,5 +1,5 @@
-import { HistorialDTO } from "../interfaces/historial-dto";
 import { ImcResult } from "../interfaces/ImcResult";
+import { PaginatedHistorialResponse } from "../types/paginated-historial-response.dto";
 import api from "./api";
 
 export const calcularImc = async (
@@ -19,13 +19,18 @@ export const calcularImc = async (
   }
 };
 
-export const getHistoriales = async (): Promise<HistorialDTO[]> => {
+export const getHistorialesPaginated = async (
+  page: number,
+  limit: number
+): Promise<PaginatedHistorialResponse> => {
   try {
-    const { data } = await api.get<HistorialDTO[]>("/historial");
+    const { data } = await api.get<PaginatedHistorialResponse>(
+      `/historial/paginado?page=${page}&limit=${limit}`
+    );
     return data;
   } catch (error: any) {
     throw new Error(
-      "Error al cargar el historial. Verifica tu sesión o con el equipo de backend."
+      "Error al cargar el historial paginado. Verifica tu sesión o con el equipo de backend."
     );
   }
 };

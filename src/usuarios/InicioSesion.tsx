@@ -29,11 +29,9 @@ function InicioSesion() {
     setLoading(true);
     setError("");
     try {
-      const nombre = await login(email, contraseña); // Obtén el nombre del servicio
+      const nombre = await login(email, contraseña);
       authLogin(nombre); // Actualiza el contexto con el nombre
-      setTimeout(() => {
-        navigate("/imc/calcular");
-      }, 0);
+      navigate("/imc/calcular");
     } catch (err: any) {
       setError("El usuario no existe o la contraseña es incorrecta");
     } finally {
@@ -78,10 +76,12 @@ function InicioSesion() {
           </form>
 
           <div className="mt-4 text-center text-white">
-         
-          
-            <Link to="/cambiarContraseña" className="text-darkblue fw-bold text-decoration-underline">Olvidé mi contraseña</Link>
-         
+            <Link
+              to="/forgot-password"
+              className="text-dark-blue fw-bold text-decoration-underline"
+            >
+              Olvidé mi contraseña
+            </Link>
           </div>
         </div>
 

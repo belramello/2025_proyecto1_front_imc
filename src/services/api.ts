@@ -29,7 +29,6 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       const refresh_token = obtenerRefreshToken();
       if (refresh_token) {
-        console.log("tengo refresh token");
         try {
           const response = await axios.post(
             `${api.defaults.baseURL}/auth/refresh`,
@@ -49,12 +48,10 @@ api.interceptors.response.use(
           }
         } catch (refreshError) {
           eliminarTokens();
-          window.location.href = "/iniciar-sesion";
           return Promise.reject(refreshError);
         }
       } else {
         eliminarTokens();
-        window.location.href = "/iniciar-sesion";
       }
     }
     return Promise.reject(error);

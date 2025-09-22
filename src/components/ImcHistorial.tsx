@@ -1,148 +1,123 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { HistorialDTO } from "../interfaces/historial-dto";
-import { getHistoriales } from "../services/imcService";
+import { getHistorialesPaginated } from "../services/imcService";
 import ImcError from "./ImcError";
 import Pagination from "./Pagination";
 
 const Historial: React.FC = () => {
   const [historiales, setHistoriales] = useState<HistorialDTO[]>([]);
-  const [filteredHistoriales, setFilteredHistoriales] = useState<HistorialDTO[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [startDate, setStartDate] = useState<string>("");
-  const [endDate, setEndDate] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
 
   const [page, setPage] = useState(1);
   const [limit] = useState(5);
   const [totalPages, setTotalPages] = useState(1);
 
-  const fetchHistorial = async () => {
+  const fetchHistorial = async (pageNumber: number) => {
+    setLoading(true);
     try {
-      const data = await getHistoriales();
-      setHistoriales(data);
-      setFilteredHistoriales(data);
-      setTotalPages(Math.ceil(data.length / limit));
+      const data = await getHistorialesPaginated(pageNumber, limit);
+      setHistoriales(data.historiales);
+      setTotalPages(data.lastPage);
       setError(null);
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Error al cargar el historial."
       );
       setHistoriales([]);
-      setFilteredHistoriales([]);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchHistorial();
-  }, []);
+    fetchHistorial(page);
+  }, [page]);
 
-  const handleFilter = () => {
-    const start = startDate ? new Date(startDate + "T00:00:00Z") : null;
-    const end = endDate ? new Date(endDate + "T23:59:59.999Z") : null;
-
-    const filtered = historiales.filter((historial) => {
-      const calcDate = new Date(historial.fechaHora);
-      return (!start || calcDate >= start) && (!end || calcDate <= end);
+  function formatFechaArgentina(fecha: string | Date) {
+    const date = new Date(fecha);
+    date.setHours(date.getHours() - 3); // restar 3 horas
+    return date.toLocaleString("es-AR", {
+      hour12: false, //
     });
-
-    setFilteredHistoriales(filtered);
-    setPage(1);
-    setTotalPages(Math.ceil(filtered.length / limit));
-  };
-
-  const paginatedFiltered = filteredHistoriales.slice(
-    (page - 1) * limit,
-    page * limit
-  );
-
+  }
   return (
-    <>
-      <div className="main-bg-color min-vh-100 d-flex flex-column align-items-center justify-content-center">
+    <div className="main-bg-color min-vh-100">
+      <div className="container pt-5">
         <div className="text-center text-white mb-4">
           <h1 className="fw-bold fs-2">Historial de Cálculos de IMC</h1>
         </div>
-        <div className="card-container shadow-lg d-flex mb-4">
-          <div className="p-4 w-100 text-center">
-            <div className="mb-2 ">
-              <label className="text-dark-blue me-2">Desde:</label>
-              <input
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                className="form-control d-inline-block w-auto"
-              />
-              <label className="ms-3 text-dark-blue me-2">Hasta:</label>
-              <input
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                className="form-control d-inline-block w-auto"
-              />
-              <button className="btn btn-primary ms-2" onClick={handleFilter}>
-                Filtrar
-              </button>
-            </div>
+
+        <div className="card shadow-lg mb-4">
+          <div className="card-body">
             {error && <ImcError error={error} />}
             {loading ? (
-              <div className="spinner-border text-primary" role="status">
-                <span className="sr-only"></span>
+              <div className="d-flex justify-content-center">
+                <div className="spinner-border text-primary" role="status">
+                  <span className="sr-only"></span>
+                </div>
               </div>
             ) : (
               <>
-                <table className="table table-striped">
-                  <thead>
-                    <tr>
-                      <th>Fecha</th>
-                      <th>Peso (kg)</th>
-                      <th>Altura (m)</th>
-                      <th>IMC</th>
-                      <th>Categoría</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {!loading && paginatedFiltered.length === 0 ? (
+                <div className="table-responsive">
+                  <table className="table table-striped align-middle">
+                    <thead>
                       <tr>
-                        <td colSpan={5} className="text-center text-muted">
-                          No hay cálculos registrados para este usuario o en el
-                          rango seleccionado.
-                        </td>
+                        <th>Fecha</th>
+                        <th>Peso (kg)</th>
+                        <th>Altura (m)</th>
+                        <th>IMC</th>
+                        <th>Categoría</th>
                       </tr>
-                    ) : (
-                      paginatedFiltered.map((historial) => (
-                        <tr key={historial.id}>
-                          <td>
-                            {new Date(historial.fechaHora).toLocaleString(
-                              "es-AR",
-                              { timeZone: "UTC" }
-                            )}
-                          </td>
-                          <td>{historial.peso}</td>
-                          <td>{historial.altura}</td>
-                          <td>{historial.imc.toFixed(2)}</td>
-                          <td>
-                            <span className={getCategoriaColor(historial.categoria)}>
-                              {historial.categoria}
-                            </span>
+                    </thead>
+                    <tbody>
+                      {historiales.length === 0 ? (
+                        <tr>
+                          <td colSpan={5} className="text-center text-muted">
+                            No hay cálculos registrados para este usuario.
                           </td>
                         </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
-                <Pagination
-                  currentPage={page}
-                  totalPages={totalPages}
-                  onPageChange={setPage}
-                />
+                      ) : (
+                        historiales.map((historial) => (
+                          <tr key={historial.id}>
+                            <td>
+                              <td>
+                                {formatFechaArgentina(historial.fechaHora)}
+                              </td>
+                            </td>
+                            <td>{historial.peso}</td>
+                            <td>{historial.altura}</td>
+                            <td>{historial.imc.toFixed(2)}</td>
+                            <td>
+                              <span
+                                className={getCategoriaColor(
+                                  historial.categoria
+                                )}
+                              >
+                                {historial.categoria}
+                              </span>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+
+                <div className="d-flex justify-content-center mt-3">
+                  <Pagination
+                    currentPage={page}
+                    totalPages={totalPages}
+                    onPageChange={setPage}
+                  />
+                </div>
               </>
             )}
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
@@ -150,13 +125,13 @@ function getCategoriaColor(categoria: string) {
   switch (categoria.toLowerCase()) {
     case "obeso":
     case "sobrepeso":
-      return "text-danger";
+      return "text-danger fw-bold";
     case "normal":
-      return "text-success";
+      return "text-success fw-bold";
     case "bajo peso":
-      return "text-warning";
+      return "text-warning fw-bold";
     default:
-      return "";
+      return "fw-bold";
   }
 }
 

@@ -9,7 +9,7 @@ import axios from "axios";
 //url del back desplegado: https://proyecto-1-backend.onrender.com
 //url local http://localhost:3000
 const api = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: "https://proyecto-1-backend.onrender.com",
   headers: {
     "Content-Type": "application/json",
   },

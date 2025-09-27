@@ -72,7 +72,7 @@ function App() {
             }
           />
           <Route
-            path="/analiticas"
+            path="/estadisticas"
             element={
               <ProtectedRoute>
                 <NavBar />
